@@ -1,0 +1,14 @@
+artifact_uri: file:C:/Users/giris/Downloads/fraud-detection-system/mlruns/309038049294010635/4b35668d2b784cecb5e34b9b8500242f/artifacts
+end_time: 1768331818248
+entry_point_name: ''
+experiment_id: '309038049294010635'
+lifecycle_stage: active
+run_id: 4b35668d2b784cecb5e34b9b8500242f
+run_name: xgboost
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1768331818011
+status: 4
+tags: []
+user_id: giris

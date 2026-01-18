@@ -1,0 +1,57 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
+# Virtual environments
+venv/
+env/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Data files (mount these as volumes instead)
+data/raw/
+*.csv
+*.zip
+
+# Model files (mount these as volumes)
+models/saved_models/*.pkl
+models/saved_models/*.h5
+mlruns/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Documentation
+*.md
+docs/
+
+# Jupyter
+notebooks/
+.ipynb_checkpoints/
+
+# Git
+.git/
+.gitignore
+
+# Logs
+*.log
+logs/
+
+# Environment
+.env
+
+# OS
+.DS_Store
+Thumbs.db

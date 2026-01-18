@@ -1,0 +1,14 @@
+artifact_uri: file:C:/Users/giris/Downloads/fraud-detection-system/mlruns/309038049294010635/68391c061b2f4d928c1951ace5b70d7f/artifacts
+end_time: 1768331882410
+entry_point_name: ''
+experiment_id: '309038049294010635'
+lifecycle_stage: active
+run_id: 68391c061b2f4d928c1951ace5b70d7f
+run_name: isolation_forest
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1768331859587
+status: 3
+tags: []
+user_id: giris

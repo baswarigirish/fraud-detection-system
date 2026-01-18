@@ -1,71 +1,9 @@
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
+# Minimal .gitignore - pushing all project files including data, models, logs, etc.
 
-# Virtual environments
-venv/
-env/
-ENV/
-
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# Environment variables
-.env
-
-# Data files
-data/raw/
-data/processed/
-*.csv
-*.zip
-
-# Model artifacts
-models/saved_models/
-*.pkl
-*.h5
-*.joblib
-
-# MLflow
-mlruns/
-mlartifacts/
-
-# Jupyter
-.ipynb_checkpoints/
-*.ipynb_checkpoints
-
-# Logs
-*.log
-logs/
-
-# OS
+# OS-specific files only
 .DS_Store
 Thumbs.db
 
-# Test coverage
-.coverage
-htmlcov/
-.pytest_cache/
-
-# Docker
-.dockerignore
+# Python bytecode cache (temporary files that get regenerated)
+__pycache__/
+*.pyc

@@ -1,0 +1,10 @@
+artifact_location: file:C:/Users/giris/Downloads/fraud-detection-system/mlruns/309038049294010635/models/m-489855da73ec4c059ccb94398c07d475/artifacts
+creation_timestamp: 1768331792219
+experiment_id: '309038049294010635'
+last_updated_timestamp: 1768331817909
+model_id: m-489855da73ec4c059ccb94398c07d475
+model_type: null
+name: model
+source_run_id: c9399e8187ef452490788888c57909ac
+status: 2
+status_message: null
