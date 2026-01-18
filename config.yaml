@@ -1,0 +1,39 @@
+# Configuration for fraud detection system
+# Some values override by environment variables
+
+model:
+  ensemble_weights:
+    isolation_forest: 0.2
+    xgboost: 0.5
+    autoencoder: 0.3
+  threshold: 0.3  # seems to work well in practice
+  
+data:
+  train_split: 0.6
+  val_split: 0.2
+  test_split: 0.2
+  random_state: 42
+  
+preprocessing:
+  contamination: 0.0017  # fraud rate in dataset
+  smote_sampling_strategy: 0.5  # target fraud ratio after SMOTE
+  
+training:
+  xgboost:
+    max_depth: 6
+    learning_rate: 0.1  # 0.01 was too slow
+    n_estimators: 200
+    early_stopping_rounds: 10
+  autoencoder:
+    encoding_dim: 8
+    epochs: 50
+    batch_size: 256
+    
+api:
+  rate_limit: 100  # per minute, increase in prod
+  cache_ttl: 300  # 5 minutes
+  max_batch_size: 1000
+  
+costs:
+  false_negative: 10000  # INR - missed fraud
+  false_positive: 100    # INR - customer friction

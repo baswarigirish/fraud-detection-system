@@ -1,0 +1,55 @@
+# Prometheus alert rules for fraud detection API
+
+groups:
+  - name: fraud_api_alerts
+    interval: 30s
+    rules:
+      # High API latency alert
+      - alert: HighAPILatency
+        expr: histogram_quantile(0.95, rate(fraud_api_request_duration_seconds_bucket[5m])) > 0.2
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High API latency detected"
+          description: "P95 latency is {{ $value }}s (threshold: 0.2s) for the last 5 minutes"
+      
+      # High fraud rate alert (potential attack)
+      - alert: HighFraudRate
+        expr: (rate(fraud_predictions_total{prediction="fraud"}[10m]) / rate(fraud_predictions_total[10m])) > 0.05
+        for: 10m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Unusually high fraud rate detected"
+          description: "Fraud rate is {{ $value | humanizePercentage }} (threshold: 5%) - potential attack"
+      
+      # High error rate alert
+      - alert: HighErrorRate
+        expr: (sum(rate(fraud_api_requests_total{status=~"5.."}[5m])) / sum(rate(fraud_api_requests_total[5m]))) > 0.01
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "High error rate detected"
+          description: "Error rate is {{ $value | humanizePercentage }} (threshold: 1%)"
+      
+      # API down alert
+      - alert: APIDown
+        expr: up{job="fraud-api"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Fraud detection API is down"
+          description: "The fraud detection API has been down for more than 1 minute"
+      
+      # Low request volume (might indicate problem)
+      - alert: LowRequestVolume
+        expr: rate(fraud_api_requests_total[5m]) < 0.1
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Very low API request volume"
+          description: "Request rate is {{ $value }} req/s - might indicate connectivity issues"

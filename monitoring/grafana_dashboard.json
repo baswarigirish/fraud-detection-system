@@ -1,0 +1,182 @@
+{
+  "dashboard": {
+    "title": "Fraud Detection API Dashboard",
+    "tags": ["fraud-detection", "ml", "api"],
+    "timezone": "browser",
+    "schemaVersion": 16,
+    "version": 1,
+    "refresh": "10s",
+    "panels": [
+      {
+        "id": 1,
+        "title": "Request Rate (requests/sec)",
+        "type": "graph",
+        "gridPos": {"x": 0, "y": 0, "w": 12, "h": 8},
+        "targets": [
+          {
+            "expr": "rate(fraud_api_requests_total[1m])",
+            "legendFormat": "{{method}} {{endpoint}}",
+            "refId": "A"
+          }
+        ],
+        "yaxes": [
+          {"format": "reqps", "label": "Requests/sec"},
+          {"format": "short"}
+        ]
+      },
+      {
+        "id": 2,
+        "title": "API Latency Percentiles (ms)",
+        "type": "graph",
+        "gridPos": {"x": 12, "y": 0, "w": 12, "h": 8},
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.50, rate(fraud_api_request_duration_seconds_bucket[5m])) * 1000",
+            "legendFormat": "P50",
+            "refId": "A"
+          },
+          {
+            "expr": "histogram_quantile(0.95, rate(fraud_api_request_duration_seconds_bucket[5m])) * 1000",
+            "legendFormat": "P95",
+            "refId": "B"
+          },
+          {
+            "expr": "histogram_quantile(0.99, rate(fraud_api_request_duration_seconds_bucket[5m])) * 1000",
+            "legendFormat": "P99",
+            "refId": "C"
+          }
+        ],
+        "yaxes": [
+          {"format": "ms", "label": "Latency"},
+          {"format": "short"}
+        ],
+        "alert": {
+          "conditions": [
+            {
+              "evaluator": {"params": [100], "type": "gt"},
+              "query": {"params": ["B", "5m", "now"]},
+              "type": "query"
+            }
+          ],
+          "name": "High P95 Latency"
+        }
+      },
+      {
+        "id": 3,
+        "title": "Prediction Distribution",
+        "type": "piechart",
+        "gridPos": {"x": 0, "y": 8, "w": 8, "h": 8},
+        "targets": [
+          {
+            "expr": "sum(increase(fraud_predictions_total[5m])) by (prediction)",
+            "legendFormat": "{{prediction}}",
+            "refId": "A"
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "title": "Fraud Rate Over Time (%)",
+        "type": "graph",
+        "gridPos": {"x": 8, "y": 8, "w": 16, "h": 8},
+        "targets": [
+          {
+            "expr": "(rate(fraud_predictions_total{prediction=\"fraud\"}[5m]) / rate(fraud_predictions_total[5m])) * 100",
+            "legendFormat": "Fraud %",
+            "refId": "A"
+          }
+        ],
+        "yaxes": [
+          {"format": "percent", "label": "Fraud Rate"},
+          {"format": "short"}
+        ]
+      },
+      {
+        "id": 5,
+        "title": "HTTP Status Codes",
+        "type": "graph",
+        "gridPos": {"x": 0, "y": 16, "w": 12, "h": 8},
+        "targets": [
+          {
+            "expr": "rate(fraud_api_requests_total{status=\"200\"}[1m])",
+            "legendFormat": "200 OK",
+            "refId": "A"
+          },
+          {
+            "expr": "rate(fraud_api_requests_total{status=~\"4..\"}[1m])",
+            "legendFormat": "4xx Client Error",
+            "refId": "B"
+          },
+          {
+            "expr": "rate(fraud_api_requests_total{status=~\"5..\"}[1m])",
+            "legendFormat": "5xx Server Error",
+            "refId": "C"
+          }
+        ],
+        "yaxes": [
+          {"format": "reqps", "label": "Requests/sec"},
+          {"format": "short"}
+        ]
+      },
+      {
+        "id": 6,
+        "title": "Error Rate (%)",
+        "type": "singlestat",
+        "gridPos": {"x": 12, "y": 16, "w": 6, "h": 4},
+        "targets": [
+          {
+            "expr": "(sum(rate(fraud_api_requests_total{status=~\"5..\"}[5m])) / sum(rate(fraud_api_requests_total[5m]))) * 100",
+            "refId": "A"
+          }
+        ],
+        "format": "percent",
+        "thresholds": "1,5",
+        "colors": ["#299c46", "#e0b400", "#d44a3a"]
+      },
+      {
+        "id": 7,
+        "title": "Total Requests (5m)",
+        "type": "singlestat",
+        "gridPos": {"x": 18, "y": 16, "w": 6, "h": 4},
+        "targets": [
+          {
+            "expr": "sum(increase(fraud_api_requests_total[5m]))",
+            "refId": "A"
+          }
+        ],
+        "format": "none"
+      },
+      {
+        "id": 8,
+        "title": "Current P95 Latency (ms)",
+        "type": "singlestat",
+        "gridPos": {"x": 12, "y": 20, "w": 6, "h": 4},
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, rate(fraud_api_request_duration_seconds_bucket[5m])) * 1000",
+            "refId": "A"
+          }
+        ],
+        "format": "ms",
+        "thresholds": "100,200",
+        "colors": ["#299c46", "#e0b400", "#d44a3a"]
+      },
+      {
+        "id": 9,
+        "title": "Fraud Count (5m)",
+        "type": "singlestat",
+        "gridPos": {"x": 18, "y": 20, "w": 6, "h": 4},
+        "targets": [
+          {
+            "expr": "sum(increase(fraud_predictions_total{prediction=\"fraud\"}[5m]))",
+            "refId": "A"
+          }
+        ],
+        "format": "none",
+        "colorBackground": true,
+        "thresholds": "10,50",
+        "colors": ["#299c46", "#e0b400", "#d44a3a"]
+      }
+    ]
+  }
+}
